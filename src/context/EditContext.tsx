@@ -1,85 +1,67 @@
-import { createContext, useReducer } from 'react'
+import React, { createContext, useCallback, useReducer, useState } from 'react'
+import {
+  ActionEditTypes,
+  EditFilters,
+  initialValue,
+  reducer
+} from '../reducers/editReducer'
 
 interface IEditContextProdiver {
   children: React.ReactNode
 }
 
-export interface EditFilters {
-  w: string | null
-  h: string | null
-  blur: string | null
-}
-
-type ActionEditTypes =
-  | {
-      type: 'EDIT_WIDTH'
-      payload: EditFilters
-    }
-  | {
-      type: 'EDIT_HEIGHT'
-      payload: EditFilters
-    }
-  | {
-      type: 'EDIT_BLUR'
-      payload: EditFilters
-    }
-
-function reducer(state: EditFilters, action: ActionEditTypes) {
-  if (action.type === 'EDIT_WIDTH') {
-    return {
-      ...action.payload,
-      w: action.payload.w
-    }
-  }
-  if (action.type === 'EDIT_HEIGHT') {
-    return {
-      ...action.payload,
-      h: action.payload.h
-    }
-  }
-  if (action.type === 'EDIT_BLUR') {
-    return {
-      ...action.payload,
-      blur: action.payload.blur
-    }
-  }
-
-  throw new Error('error in reducer')
-}
-
 interface EditContext {
   state: EditFilters
   handleChangeSize: (e: React.ChangeEvent<HTMLInputElement>) => void
+  dispatch: React.Dispatch<ActionEditTypes>
+  handleReset: () => void
 }
 
 export const EditContext = createContext({} as EditContext)
 
 export function EditContextProdiver({ children }: IEditContextProdiver) {
-  const [state, dispatch] = useReducer(reducer, {
-    w: null,
-    h: null,
-    blur: null
-  })
+  const [typingTimeout, setTypingTimeout] = useState(500)
+  const [targetValue, setTargetValue] = useState('')
+  const [state, dispatch] = useReducer(reducer, initialValue)
 
-  const handleChangeSize = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const target = e.target as typeof e.target & { name: string; value: string }
-    if (target.name === 'w') {
-      dispatch({
-        type: 'EDIT_WIDTH',
-        payload: { ...state, w: target.value }
-      })
-    }
-    if (target.name === 'h') {
-      dispatch({
-        type: 'EDIT_HEIGHT',
-        payload: { ...state, h: target.value }
-      })
-    }
+  const handleReset = () => {
+    dispatch({
+      type: 'RESET',
+      payload: {
+        ...initialValue
+      }
+    })
   }
+
+  const handleChangeSize = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value, checked } = e.target as typeof e.target & {
+        name: string
+        value: string
+      }
+      console.log(name, value, checked)
+      setTargetValue(value)
+      clearTimeout(typingTimeout)
+      const settingTimeout = setTimeout(() => {
+        dispatch({
+          type: 'EDIT',
+          name,
+          checked,
+          value
+        })
+      }, 150)
+      setTypingTimeout(settingTimeout)
+      console.log(name, value)
+    },
+    []
+  )
 
   const value = {
     state,
-    handleChangeSize
+    dispatch,
+    handleChangeSize,
+    handleReset,
+    targetValue
   }
   return <EditContext.Provider value={value}>{children}</EditContext.Provider>
 }
