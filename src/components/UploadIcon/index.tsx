@@ -1,8 +1,14 @@
-export const UploadIcon = () => {
+interface uploadIconProps {
+  classColor?: string
+}
+
+export const UploadIcon = ({
+  classColor = 'text-blue-500'
+}: uploadIconProps) => {
   return (
     <svg
       aria-hidden='true'
-      className='w-10 h-10 mb-3 text-gray-400'
+      className={`w-16 h-16 mb-3 ${classColor}`}
       fill='none'
       stroke='currentColor'
       viewBox='0 0 24 24'
