@@ -1,3 +1,5 @@
+import { Navbar } from '../Navbar'
+
 interface LayoutProps {
   children: React.ReactNode
 }
@@ -5,11 +7,11 @@ interface LayoutProps {
 export const Layout = ({ children }: LayoutProps) => {
   return (
     <div>
-      <header>
-        <nav>comppa</nav>
-      </header>
+      <Navbar />
       <main className='min-h-screen'>{children}</main>
-      <footer>zoi un footer</footer>
+      <footer className='bg-zinc-900 px-4 py-8 flex justify-center items-center text-slate-100 font-bold'>
+        zoi un footer
+      </footer>
     </div>
   )
 }
