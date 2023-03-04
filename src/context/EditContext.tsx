@@ -1,10 +1,6 @@
 import React, { createContext, useCallback, useReducer, useState } from 'react'
-import {
-  ActionEditTypes,
-  EditFilters,
-  initialValue,
-  reducer
-} from '../reducers/editReducer'
+import { initialValue, reducer } from '../reducers/editReducer'
+import { ActionEditTypes, EditFilters } from '../types'
 
 interface IEditContextProdiver {
   children: React.ReactNode
