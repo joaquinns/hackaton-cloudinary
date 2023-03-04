@@ -1,11 +1,23 @@
 import { Cloudinary } from '@cloudinary/url-gen'
+import {
+  brightness,
+  fillLight,
+  hue,
+  improve,
+  saturation,
+  tint
+} from '@cloudinary/url-gen/actions/adjust'
+import { format, quality } from '@cloudinary/url-gen/actions/delivery'
+import { blur, grayscale } from '@cloudinary/url-gen/actions/effect'
 import { fill } from '@cloudinary/url-gen/actions/resize'
-import { useEffect, useState } from 'react'
+import { auto } from '@cloudinary/url-gen/qualifiers/quality'
+import { useEffect, useMemo, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
 import { API_KEY, CLOUD_NAME, UPLOAD_PRESET, UPLOAD_URL } from '../config'
 import { useEdit } from './useEdit'
 
 export const useEditBoard = () => {
-  const { state } = useEdit()
+  const { state, dispatch } = useEdit()
   const [publicId, setPublicId] = useState('')
   const [newImage, setNewImage] = useState<null | string>(null)
 
@@ -15,8 +27,36 @@ export const useEditBoard = () => {
     }
   })
 
+  const focusedStyle = {
+    transition: 'border .24s ease-in-out',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderStyle: 'dashed',
+    borderColor: '#2196f3'
+  }
+
+  const acceptStyle = {
+    transition: 'border .24s ease-in-out',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderStyle: 'dashed',
+    borderColor: '#00e676'
+  }
+
+  const rejectStyle = {
+    transition: 'border .24s ease-in-out',
+    borderWidth: 2,
+    borderRadius: 2,
+    borderStyle: 'dashed',
+    borderColor: '#ff1744'
+  }
+
+  const iconColor = () => {
+    if (isDragAccept) return 'text-green-400'
+    if (isDragReject) return 'text-red-400'
+  }
+
   const onDrop = (files: any) => {
-    console.log(files, 'files')
     const [file] = files
     console.log(file)
     const data = new FormData()
@@ -36,15 +76,79 @@ export const useEditBoard = () => {
       })
   }
 
+  const { getInputProps, getRootProps, isDragAccept, isDragReject, isFocused } =
+    useDropzone({
+      accept: {
+        'image/*': ['.png', '.jpg', '.webp', '.jpeg'],
+        'application/pdf': ['.pdf']
+      },
+      maxFiles: 1,
+      onDrop
+    })
+
+  const style = useMemo(
+    () => ({
+      ...(isFocused ? focusedStyle : {}),
+      ...(isDragAccept ? acceptStyle : {}),
+      ...(isDragReject ? rejectStyle : {})
+    }),
+    [isFocused, isDragAccept, isDragReject]
+  )
+
   useEffect(() => {
-    const modifiedImage = cld.image(publicId).resize(
+    const modifiedImage = cld.image(publicId)
+    if (state.blur) {
+      modifiedImage.effect(blur(Number(state.blur)))
+    }
+
+    if (state.quality) {
+      modifiedImage.adjust(improve())
+    }
+
+    if (state.hue) {
+      modifiedImage.adjust(hue(Number(state.hue ?? 0)))
+    }
+
+    if (state.brightness) {
+      modifiedImage.adjust(brightness().level(state.brightness))
+    }
+
+    if (state.light) {
+      modifiedImage.adjust(fillLight().blend(Number(state.light) || 0))
+    }
+
+    if (state.saturation) {
+      modifiedImage.adjust(saturation().level(state.light || 1))
+    }
+
+    if (state.filter) {
+      let filtered = `${state.opacity}:${state.filter}`
+      if (state.secondary) {
+        filtered += `:0p:${state.secondary}:100p`
+      }
+
+      modifiedImage
+        .delivery(format(auto()))
+        .delivery(quality(auto()))
+        .effect(grayscale())
+        .adjust(tint(filtered))
+    }
+
+    modifiedImage.resize(
       fill()
-        .width(Number(state.w) || 200)
-        .height(Number(state.h) || 200)
+        .width(Number(state.w) || 400)
+        .height(Number(state.h) || 400)
     )
 
     setNewImage(modifiedImage.toURL())
   }, [publicId, state])
 
-  return { newImage, onDrop }
+  return {
+    newImage,
+    dispatch,
+    iconColor,
+    style,
+    getInputProps,
+    getRootProps
+  }
 }
