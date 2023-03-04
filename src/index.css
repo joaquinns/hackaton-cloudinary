@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.inputColor {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+.inputColor::-webkit-color-swatch {
+  border-radius: 15px;
+  border: none;
+}
+.inputColor::-moz-color-swatch {
+  border-radius: 15px;
+  border: none;
+}
