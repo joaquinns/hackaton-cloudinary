@@ -9,17 +9,21 @@ export const initialValue = {
   hue: 0,
   light: '0',
   saturation: '0',
+  rounded: 0,
   filter: null,
   opacity: '100',
   secondary: null
 }
 
-export function reducer(state: EditFilters, action: ActionEditTypes) {
+export function editReducer(
+  state: EditFilters,
+  action: ActionEditTypes
+): EditFilters {
   if (action.type === 'EDIT') {
     if (action.name === 'filter' || action.name === 'secondary') {
       return {
         ...state,
-        [action.name]: action.value.toString().substring(1)
+        [action.name]: action.value!.toString().substring(1)
       }
     }
 
@@ -29,9 +33,18 @@ export function reducer(state: EditFilters, action: ActionEditTypes) {
         [action.name]: action.checked ?? false
       }
     }
+
+    if (action.width && action.height) {
+      return {
+        ...state,
+        h: action.height,
+        w: action.width
+      }
+    }
+
     return {
       ...state,
-      [action.name]: action.value
+      [action.name!]: action.value!
     }
   }
 
@@ -48,6 +61,7 @@ export function reducer(state: EditFilters, action: ActionEditTypes) {
       saturation: '0',
       filter: null,
       opacity: '100',
+      rounded: 0,
       secondary: null
     }
   }
