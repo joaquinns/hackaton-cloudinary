@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useEdit } from '../../hooks/useEdit'
+import { BrushIcon } from '../Icons/BrushIcon'
 import { SliderInput } from '../SliderInput'
 
 interface CustomFilterProps {
@@ -13,9 +14,11 @@ export const CustomFilter = ({ onChange }: CustomFilterProps) => {
   return (
     <div className='relative flex items-center justify-center'>
       <button
-        className='relative px-4 py-2 bg-slate-900 rounded text-white'
+        className='relative px-4 py-2 flex gap-2 items-center bg-gray-700
+        hover:bg-gray-800 ease-in-out duration-150 rounded text-white font-semibold'
         onClick={() => setCustomFilter(!customFilter)}
       >
+        <BrushIcon />
         Custom filter
       </button>
       {customFilter && (
