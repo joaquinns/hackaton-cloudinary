@@ -60,6 +60,13 @@ export const EditBoard = ({ image }: EditBoardProps) => {
             value={state.blur}
           />
           <SliderInput
+            name='rounded'
+            onChange={handleChangeSize}
+            min='0'
+            max='100'
+            value={state.rounded.toString()}
+          />
+          <SliderInput
             name='brightness'
             onChange={handleChangeSize}
             min='0'
@@ -83,7 +90,7 @@ export const EditBoard = ({ image }: EditBoardProps) => {
           <CustomFilter onChange={handleChangeSize} />
           <button
             onClick={handleReset}
-            className='relative px-4 py-2 bg-red-500 font-semibold rounded text-white'
+            className='relative px-4 py-2 bg-red-500 hover:bg-red-600 ease-in-out duration-150 font-semibold rounded text-white'
           >
             Discard changes
           </button>
