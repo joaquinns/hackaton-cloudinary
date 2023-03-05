@@ -4,7 +4,7 @@ export const Footer = () => {
   return (
     <footer className='bg-zinc-900 px-4 py-8 flex justify-around items-center text-slate-100 font-bold'>
       <a
-        href='#'
+        href='https://github.com/joaquinns/hackaton-cloudinary'
         target='_blank'
         className='flex gap-4 justify-center items-center text-white'
       >
@@ -12,7 +12,7 @@ export const Footer = () => {
         Source code
       </a>
       <a
-        href='#'
+        href='https://cloudinary.com/'
         target='_blank'
         className='text-sm flex flex-col gap-4 justify-center items-center text-white'
       >
