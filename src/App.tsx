@@ -46,7 +46,7 @@ function App() {
                       or drag and drop
                     </p>
                     <p className='text-xs text-gray-500 dark:text-gray-400'>
-                      PDF to SVG, PNG, JPG or GIF.
+                      PNG, JPG, WEBP or JPEG.
                     </p>
                   </div>
                   <input
