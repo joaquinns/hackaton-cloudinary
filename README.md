@@ -2,6 +2,7 @@
 
 ![Screenshoot](https://github.com/joaquinns/hackaton-cloudinary/blob/master/preview.PNG)
 
+In this app you be able to edit your images, scale, blur, resize, add custom filters, light, brightness, hue etc.
 This app was created for the midudev and cloudinary hackaton using the tools of cloudinary.
 [See the app](https://hackaton-cloudinary.vercel.app/)
 
