@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useReducer, useState } from 'react'
-import { initialValue, reducer } from '../reducers/editReducer'
+import { editReducer, initialValue } from '../reducers/editReducer'
 import { ActionEditTypes, EditFilters } from '../types'
 
 interface IEditContextProdiver {
@@ -18,14 +18,11 @@ export const EditContext = createContext({} as EditContext)
 export function EditContextProdiver({ children }: IEditContextProdiver) {
   const [typingTimeout, setTypingTimeout] = useState(500)
   const [targetValue, setTargetValue] = useState('')
-  const [state, dispatch] = useReducer(reducer, initialValue)
+  const [state, dispatch] = useReducer(editReducer, initialValue)
 
   const handleReset = () => {
     dispatch({
-      type: 'RESET',
-      payload: {
-        ...initialValue
-      }
+      type: 'RESET'
     })
   }
 
