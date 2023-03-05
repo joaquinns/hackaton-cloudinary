@@ -32,7 +32,6 @@ export function EditContextProdiver({ children }: IEditContextProdiver) {
         name: string
         value: string
       }
-      console.log(name, value, checked)
       setTargetValue(value)
       clearTimeout(typingTimeout)
       const settingTimeout = setTimeout(() => {
@@ -44,7 +43,6 @@ export function EditContextProdiver({ children }: IEditContextProdiver) {
         })
       }, 150)
       setTypingTimeout(settingTimeout)
-      console.log(name, value)
     },
     []
   )
