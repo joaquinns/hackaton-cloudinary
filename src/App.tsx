@@ -1,7 +1,7 @@
 import { Backgroundsvg } from './components/Backgroundsvg'
 import { EditBoard } from './components/EditBoard'
+import { UploadIcon } from './components/Icons/UploadIcon'
 import { Layout } from './components/Layout'
-import { UploadIcon } from './components/UploadIcon'
 import { useEditBoard } from './hooks/useEditBoard'
 
 function App() {
