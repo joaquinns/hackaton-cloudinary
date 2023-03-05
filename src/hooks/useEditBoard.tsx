@@ -59,7 +59,6 @@ export const useEditBoard = () => {
 
   const onDrop = (files: any) => {
     const [file] = files
-    console.log(file)
     const data = new FormData()
     data.append('file', file)
     data.append('upload_preset', UPLOAD_PRESET)
@@ -72,7 +71,6 @@ export const useEditBoard = () => {
     })
       .then((data) => data.json())
       .then((image) => {
-        console.log(image)
         const height = image.height
         const width = image.width
         setPublicId(image.public_id)
