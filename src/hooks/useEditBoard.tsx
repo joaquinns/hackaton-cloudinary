@@ -10,6 +10,7 @@ import {
 import { format, quality } from '@cloudinary/url-gen/actions/delivery'
 import { blur, grayscale } from '@cloudinary/url-gen/actions/effect'
 import { fill } from '@cloudinary/url-gen/actions/resize'
+import { byRadius } from '@cloudinary/url-gen/actions/roundCorners'
 import { auto } from '@cloudinary/url-gen/qualifiers/quality'
 import { useEffect, useMemo, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -72,15 +73,21 @@ export const useEditBoard = () => {
       .then((data) => data.json())
       .then((image) => {
         console.log(image)
+        const height = image.height
+        const width = image.width
         setPublicId(image.public_id)
+        dispatch({
+          type: 'EDIT',
+          height,
+          width
+        })
       })
   }
 
   const { getInputProps, getRootProps, isDragAccept, isDragReject, isFocused } =
     useDropzone({
       accept: {
-        'image/*': ['.png', '.jpg', '.webp', '.jpeg'],
-        'application/pdf': ['.pdf']
+        'image/*': ['.png', '.jpg', '.webp', '.jpeg']
       },
       maxFiles: 1,
       onDrop
@@ -134,10 +141,14 @@ export const useEditBoard = () => {
         .adjust(tint(filtered))
     }
 
+    if (state.rounded) {
+      modifiedImage.roundCorners(byRadius(Number(state.rounded)))
+    }
+
     modifiedImage.resize(
       fill()
-        .width(Number(state.w) || 400)
-        .height(Number(state.h) || 400)
+        .width(Number(state.w) || 450)
+        .height(Number(state.h) || 450)
     )
 
     setNewImage(modifiedImage.toURL())
