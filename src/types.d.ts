@@ -1,6 +1,6 @@
 export interface EditFilters {
-  w: string | null
-  h: string | null
+  w: string | number | null
+  h: string | number | null
   blur: string
   quality: boolean
   brightness: string
@@ -9,22 +9,21 @@ export interface EditFilters {
   saturation: string
   filter: string | null
   opacity: string
+  rounded: string | number
   secondary: string | null
 }
 
 export type ActionEditTypes =
   | {
-      type: 'EDIT_HEIGHT'
-      payload: EditFilters
-    }
-  | {
       type: 'RESET'
-      payload: EditFilters
     }
   | {
       type: 'EDIT'
-      name: string
-      format?: string
+      name?: string
       checked?: boolean
-      value: string | boolean
+      default_w?: string
+      default_h?: string
+      width?: string | number
+      height?: string | number
+      value?: string | boolean
     }
